@@ -142,6 +142,14 @@ form.addEventListener('submit' , (e) => {
         //     password,
         // };
         console.log(data);
+        //o Pour remettre tous nos champs à 0
+        inputs.forEach((input) => (input.value = ""));
+        progressBar.classList = "";
+        pseudo = null;
+        email = null;
+        password = null;
+        confirmPass = null;
+        alert("Inscription validée")
     }else{
         alert("Veuillez remplir correctement les champs")
     }
