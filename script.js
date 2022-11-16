@@ -1,3 +1,4 @@
+const form = document.querySelector("form");
 const inputs = document.querySelectorAll(
   'input[type="text"] , input[type="password"]'
 );
@@ -89,10 +90,19 @@ const passwordChecker = (value) => {
     errorDisplay("password" , "" , true)
     password = value;
   }
+  //o Pour être sûr d'avoir la même longueur de mot de passe
+  if(confirmPass) confirmChecker(confirmPass);
 };
 
 const confirmChecker = (value) => {
-  console.log(value);
+  if(value !== password){
+    errorDisplay("confirm" , "les mots de passe ne correspondent pas");
+    confirmPass = false;
+  }else{
+    errorDisplay("confirm" , "" , true);
+    confirmPass = true;
+  }
+
 };
 
 inputs.forEach((input) => {
@@ -115,3 +125,24 @@ inputs.forEach((input) => {
     }
   });
 });
+
+form.addEventListener('submit' , (e) => {
+    e.preventDefault();
+    if(pseudo && email && password && confirmPass){
+        const data = {
+            pseudo : pseudo,
+            email : email,
+            password : password,
+        };
+        //o On peut écrire notre objet de la façon suivante
+        //o car on a les mêmes noms pour les indexs et les values
+        // const data = {
+        //     pseudo,
+        //     email,
+        //     password,
+        // };
+        console.log(data);
+    }else{
+        alert("Veuillez remplir correctement les champs")
+    }
+})
