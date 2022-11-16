@@ -2,33 +2,37 @@ const inputs = document.querySelectorAll(
   'input[type="text"] , input[type="password"]'
 );
 
-let pseudo , email , password , confirmPass;
+const progressBar = document.getElementById("progress-bar");
+let pseudo, email, password, confirmPass;
 
-const errorDisplay = (tag , message , valid) => {
-    const container = document.querySelector("." + tag + "-container");
-    const span = document.querySelector("." + tag + "-container > span");
+const errorDisplay = (tag, message, valid) => {
+  const container = document.querySelector("." + tag + "-container");
+  const span = document.querySelector("." + tag + "-container > span");
 
-    if(!valid){
-        container.classList.add("error");
-        span.textContent = message;
-    }else{
-        container.classList.remove("error");
-        span.textContent = message;
-    }
-}
+  if (!valid) {
+    container.classList.add("error");
+    span.textContent = message;
+  } else {
+    container.classList.remove("error");
+    span.textContent = message;
+  }
+};
 
 const pseudoChecker = (value) => {
-    if(value.length > 0 && (value.length < 3 || value.length > 20)){
-        errorDisplay("pseudo" , "le pseudo doit faire entre 3 et 20 caractères");
-        pseudo = null;
-    }else if(!value.match(/^[a-zA-Z0-9_.-]*$/)){
-        errorDisplay("pseudo" , "le pseudo ne doit pas contenir de caractères spéciaux");
-        pseudo = null;
-    }else{
-        errorDisplay("pseudo" , "" , true);
-        pseudo = value;
-    }
-}
+  if (value.length > 0 && (value.length < 3 || value.length > 20)) {
+    errorDisplay("pseudo", "le pseudo doit faire entre 3 et 20 caractères");
+    pseudo = null;
+  } else if (!value.match(/^[a-zA-Z0-9_.-]*$/)) {
+    errorDisplay(
+      "pseudo",
+      "le pseudo ne doit pas contenir de caractères spéciaux"
+    );
+    pseudo = null;
+  } else {
+    errorDisplay("pseudo", "", true);
+    pseudo = value;
+  }
+};
 
 //y Cette fonction est trop grosse et répétitive, on va donc créer une
 //y une fonction beaucoup plus simple comprenant 3 paramètres
@@ -49,17 +53,42 @@ const pseudoChecker = (value) => {
 //v };
 
 const emailChecker = (value) => {
-    if(!value.match(/^[\w-_]+@[\w-]+\.[a-z]{2,4}$/i)){
-        errorDisplay("email" , "le mail n'est pas valide"),
-        email = null;
-    }else{
-        errorDisplay("email" , "" , true);
-        email = value;
-    }
+  if (!value.match(/^[\w-_]+@[\w-]+\.[a-z]{2,4}$/i)) {
+    errorDisplay("email", "le mail n'est pas valide"), (email = null);
+  } else {
+    errorDisplay("email", "", true);
+    email = value;
+  }
 };
 
 const passwordChecker = (value) => {
-  console.log(value);
+    //o Pour éviter que toutes les class ne s'empilent
+    progressBar.classList = "";
+  //o Permet de checker dans le password
+  //o au moins 1 caractère spécial
+  //o au moins une majuscule
+  //o au moins 1 chiffre
+  //o au moins une longueur de 8 caractères
+  if (
+    !value.match(
+      /^(?=.*?[A-Z])(?=(.*[a-z]){1,})(?=(.*[\d]){1,})(?=(.*[\W]){1,})(?!.*\s).{8,}$/
+    )
+  ) {
+    errorDisplay(
+      "password",
+      "votre mot de passe doit obligatoirement contenir 8 caractères, une majuscule, un chiffre et un caractère spécial"
+    );
+    progressBar.classList.add("progressRed");
+    password = null;
+  }else if(value.length < 12){
+    progressBar.classList.add("progressBlue");
+    errorDisplay("password" , "" , true)
+    password = value;
+  }else{
+    progressBar.classList.add("progressGreen");
+    errorDisplay("password" , "" , true)
+    password = value;
+  }
 };
 
 const confirmChecker = (value) => {
